@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Web Interface</title>
+</head>
+<body>
+    <h1>Chatbot Web Interface</h1>
+    <form action="/user_input" method="post">
+        <label for="userInput">Your Message:</label>
+        <input type="text" id="userInput" name="userInput" required>
+        <button type="submit">Send</button>
+    </form>
+
+    <h2>Chatbot Response:</h2>
+    <p id="chatbotResponse"></p>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+            const userInput = document.getElementById('userInput');
+            const chatbotResponse = document.getElementById('chatbotResponse');
+
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                const response = await fetch('/user_input', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({ 'userInput': userInput.value }),
+                });
+
+                const responseData = await response.json();
+                chatbotResponse.textContent = responseData.response;
+            });
+        });
+    </script>
+</body>
+</html>
